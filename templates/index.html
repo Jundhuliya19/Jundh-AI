@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Jundh AI 3.0</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<div class="background-glow glow-one"></div>
+<div class="background-glow glow-two"></div>
+
+
+<div class="app-container">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                J
+            </div>
+
+            <div class="brand-text">
+
+                <h2>Jundh AI</h2>
+
+                <span>
+                    Multimodal Assistant
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button class="new-chat-btn"
+                id="new-chat-btn">
+
+            <span>＋</span>
+
+            New Chat
+
+
+        </button>
+
+        <!-- CHAT HISTORY SECTION -->
+
+<div class="chat-history-section">
+
+    <div class="chat-search-box">
+        <span>⌕</span>
+
+        <input
+            type="text"
+            id="chat-search-input"
+            placeholder="Search chats..."
+            autocomplete="off"
+        >
+    </div>
+
+    <div class="history-label">
+        RECENT CHATS
+    </div>
+
+    <div
+        class="chat-history-list"
+        id="chat-history-list"
+    >
+        <!-- Saved chats will appear here -->
+    </div>
+
+</div>
+
+
+        <div class="sidebar-section">
+
+            <p class="sidebar-title">
+                MODES
+            </p>
+
+
+            <button class="mode-btn active"
+                    data-mode="chat">
+
+                <span>✦</span>
+
+                AI Chat
+
+            </button>
+
+
+            <button class="mode-btn"
+                    data-mode="image">
+
+                <span>▧</span>
+
+                Create Image
+
+            </button>
+
+        </div>
+
+
+        <div class="sidebar-section">
+
+            <p class="sidebar-title">
+                TOOLS
+            </p>
+
+
+ <button class="tool-info tool-button" id="image-tool-btn">
+    <span>🖼️</span>
+    Image Analysis
+</button>
+
+<button class="tool-info tool-button" id="pdf-tool-btn">
+    <span>📄</span>
+    PDF Assistant
+</button>
+
+<button class="tool-info tool-button" id="voice-tool-btn">
+    <span>🎤</span>
+    Voice Input
+</button>
+
+<button class="tool-info tool-button" id="web-tool-btn">
+    <span>🌐</span>
+    Web Search
+</button>
+
+
+        <div class="sidebar-bottom">
+            <div class="user-profile">
+                <a href="{{ url_for('logout') }}"
+   class="logout-btn">
+
+    ↪ Logout
+
+</a>
+
+    <div class="user-avatar">
+        {{ user.name[0] | upper }}
+    </div>
+
+    <div class="user-details">
+
+        <strong>
+            {{ user.name }}
+        </strong>
+
+        <span>
+            @{{ user.username }}
+        </span>
+
+    </div>
+
+</div>
+
+
+            <button id="theme-btn"
+                    class="sidebar-action">
+
+                ◐ Theme
+
+            </button>
+
+
+            <button id="clear-chat-btn"
+                    class="sidebar-action">
+
+                ⌫ Clear Conversation
+
+            </button>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- MAIN APP -->
+
+    <main class="main-content">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+
+            <button id="menu-btn"
+                    class="menu-btn">
+
+                ☰
+
+            </button>
+
+
+            <div class="topbar-title">
+
+                <h2>
+                    Jundh AI
+                </h2>
+
+                <p id="mode-description">
+
+                    AI chat with image and document understanding
+
+                </p>
+
+            </div>
+
+
+            <div class="online-status">
+
+                <span class="online-dot"></span>
+
+                AI Online
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- CHAT AREA -->
+
+        <section id="chat-box"
+                 class="chat-box">
+
+
+            <!-- WELCOME SCREEN -->
+
+            <div class="welcome-screen"
+                 id="welcome-screen">
+
+
+                <div class="hero-logo">
+
+                    J
+
+                </div>
+
+
+                <h1>
+
+                    How can I help you?
+
+                </h1>
+
+
+                <p>
+
+                    Chat with Jundh AI, upload an image,
+                    ask questions about a PDF, or use your voice.
+
+                </p>
+
+
+
+                <div class="suggestion-grid">
+
+
+                    <button class="suggestion">
+
+                        Explain artificial intelligence simply
+
+                    </button>
+
+
+                    <button class="suggestion">
+
+                        Help me write Python code
+
+                    </button>
+
+
+                    <button class="suggestion">
+
+                        Summarize my PDF document
+
+                    </button>
+
+
+                    <button class="suggestion">
+
+                        Analyze an uploaded image
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- TYPING INDICATOR -->
+
+        <div id="typing-indicator"
+             class="typing-container hidden">
+
+
+            <div class="typing-avatar">
+
+                J
+
+            </div>
+
+
+            <div class="typing-bubble">
+
+
+                <span></span>
+
+                <span></span>
+
+                <span></span>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- FILE PREVIEW -->
+
+        <div id="file-preview"
+             class="file-preview hidden">
+
+
+            <div id="preview-content">
+
+            </div>
+
+
+            <button id="remove-file-btn">
+
+                ✕
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- COMPOSER -->
+
+        <div class="composer-area">
+
+
+            <div class="composer">
+
+
+                <!-- FILE BUTTON -->
+
+                <button id="attach-btn"
+                        class="composer-tool"
+                        title="Upload image or PDF">
+
+                    ＋
+
+                </button>
+
+
+
+                <!-- HIDDEN FILE INPUT -->
+
+                <input type="file"
+                       id="file-input"
+
+                       accept="
+                       image/png,
+                       image/jpeg,
+                       image/webp,
+                       application/pdf
+                       "
+
+                       hidden>
+
+
+
+                <!-- MESSAGE BOX -->
+
+                <textarea id="user-input"
+
+                          rows="1"
+
+                          placeholder="Message Jundh AI...">
+
+                </textarea>
+
+
+
+                <!-- VOICE -->
+
+                <button id="voice-btn"
+                        class="composer-tool"
+                        title="Voice input">
+
+                    🎤
+
+                </button>
+
+
+
+                <!-- WEB SEARCH SWITCH -->
+
+                <label class="web-search-toggle"
+                       title="Web search mode">
+
+
+                    <input type="checkbox"
+                           id="web-search-toggle">
+
+
+                    <span>
+
+                        🌐 Web
+
+                    </span>
+
+
+                </label>
+
+
+
+                <!-- SEND -->
+
+                <button id="send-btn"
+                        class="send-btn">
+
+                    ➤
+
+                </button>
+
+
+            </div>
+
+
+            <p class="ai-warning">
+
+                Jundh AI can make mistakes.
+                Verify important information.
+
+            </p>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+
+</html>
