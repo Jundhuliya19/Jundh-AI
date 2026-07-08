@@ -15,7 +15,7 @@ from pypdf import PdfReader
 import os
 import uuid
 from io import BytesIO
-import sqlite3
+import psycopg
 
 from flask_login import (
     LoginManager,
@@ -126,7 +126,7 @@ def get_history(chat_id):
         """
         SELECT role, message
         FROM messages
-        WHERE user_id = ? AND chat_id = ?
+        WHERE user_id = %s AND chat_id = %s
         ORDER BY id DESC
         LIMIT 20
         """,
@@ -170,7 +170,7 @@ def save_to_history(user_message, ai_response, chat_id):
     connection.execute(
         """
         INSERT INTO messages (user_id, chat_id, role, message)
-        VALUES (?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s)
         """,
         (current_user.id, chat_id, "User", user_message[:4000])
     )
@@ -178,7 +178,7 @@ def save_to_history(user_message, ai_response, chat_id):
     connection.execute(
         """
         INSERT INTO messages (user_id, chat_id, role, message)
-        VALUES (?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s)
         """,
         (current_user.id, chat_id, "Jundh AI", ai_response[:8000])
     )
@@ -187,7 +187,7 @@ def save_to_history(user_message, ai_response, chat_id):
         """
         SELECT title
         FROM chats
-        WHERE id = ? AND user_id = ?
+        WHERE id = %s AND user_id = %s
         """,
         (chat_id, current_user.id)
     ).fetchone()
@@ -201,8 +201,8 @@ def save_to_history(user_message, ai_response, chat_id):
         connection.execute(
             """
             UPDATE chats
-            SET title = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE id = ? AND user_id = ?
+            SET title = %s, updated_at = CURRENT_TIMESTAMP
+            WHERE id = %s AND user_id = %s
             """,
             (new_title, chat_id, current_user.id)
         )
@@ -211,7 +211,7 @@ def save_to_history(user_message, ai_response, chat_id):
             """
             UPDATE chats
             SET updated_at = CURRENT_TIMESTAMP
-            WHERE id = ? AND user_id = ?
+            WHERE id = %s AND user_id = %s
             """,
             (chat_id, current_user.id)
         )
@@ -270,7 +270,7 @@ def load_user(user_id):
         """
         SELECT id, name, username, email
         FROM users
-        WHERE id = ?
+        WHERE id = %s
         """,
         (user_id,)
     ).fetchone()
@@ -322,7 +322,8 @@ def register():
                 """
                 INSERT INTO users
                 (name, username, email, password)
-                VALUES (?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id
                 """,
                 (
                     name,
@@ -332,11 +333,10 @@ def register():
                 )
             )
 
+            user_id = cursor.fetchone()["id"]
             connection.commit()
 
-            user_id = cursor.lastrowid
-
-        except sqlite3.IntegrityError:
+        except psycopg.IntegrityError:
 
             connection.close()
 
@@ -389,8 +389,8 @@ def login():
             """
             SELECT *
             FROM users
-            WHERE username = ?
-            OR email = ?
+            WHERE username = %s
+            OR email = %s
             """,
             (
                 login_value,
@@ -468,7 +468,7 @@ def chat():
 
         connection = get_db_connection()
         owned_chat = connection.execute(
-            "SELECT id FROM chats WHERE id = ? AND user_id = ?",
+            "SELECT id FROM chats WHERE id = %s AND user_id = %s",
             (chat_id, current_user.id)
         ).fetchone()
         connection.close()
@@ -579,7 +579,8 @@ def create_new_chat():
         """
         INSERT INTO chats
         (user_id, title)
-        VALUES (?, ?)
+        VALUES (%s, %s)
+        RETURNING id
         """,
         (
             current_user.id,
@@ -587,9 +588,8 @@ def create_new_chat():
         )
     )
 
+    chat_id = cursor.fetchone()["id"]
     connection.commit()
-
-    chat_id = cursor.lastrowid
 
     connection.close()
 
@@ -613,7 +613,7 @@ def get_chats():
         """
         SELECT id, title, created_at, updated_at
         FROM chats
-        WHERE user_id = ?
+        WHERE user_id = %s
         ORDER BY updated_at DESC, id DESC
         """,
         (current_user.id,)
@@ -643,7 +643,7 @@ def history(chat_id):
     connection = get_db_connection()
 
     chat = connection.execute(
-        "SELECT id FROM chats WHERE id = ? AND user_id = ?",
+        "SELECT id FROM chats WHERE id = %s AND user_id = %s",
         (chat_id, current_user.id)
     ).fetchone()
 
@@ -655,7 +655,7 @@ def history(chat_id):
         """
         SELECT role, message
         FROM messages
-        WHERE user_id = ? AND chat_id = ?
+        WHERE user_id = %s AND chat_id = %s
         ORDER BY id ASC
         """,
         (current_user.id, chat_id)
@@ -705,8 +705,8 @@ def clear_chat():
         """
         SELECT id
         FROM chats
-        WHERE id = ?
-        AND user_id = ?
+        WHERE id = %s
+        AND user_id = %s
         """,
         (
             chat_id,
@@ -728,8 +728,8 @@ def clear_chat():
     connection.execute(
         """
         DELETE FROM messages
-        WHERE user_id = ?
-        AND chat_id = ?
+        WHERE user_id = %s
+        AND chat_id = %s
         """,
         (
             current_user.id,
@@ -769,9 +769,9 @@ def rename_chat(chat_id):
     connection.execute(
         """
         UPDATE chats
-        SET title = ?
-        WHERE id = ?
-        AND user_id = ?
+        SET title = %s
+        WHERE id = %s
+        AND user_id = %s
         """,
         (
             title[:60],
@@ -801,8 +801,8 @@ def delete_chat(chat_id):
     connection.execute(
         """
         DELETE FROM messages
-        WHERE chat_id = ?
-        AND user_id = ?
+        WHERE chat_id = %s
+        AND user_id = %s
         """,
         (
             chat_id,
@@ -813,8 +813,8 @@ def delete_chat(chat_id):
     connection.execute(
         """
         DELETE FROM chats
-        WHERE id = ?
-        AND user_id = ?
+        WHERE id = %s
+        AND user_id = %s
         """,
         (
             chat_id,
