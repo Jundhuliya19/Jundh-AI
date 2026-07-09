@@ -1,5 +1,5 @@
 // ========================================
-// JUNDH AI 3.0
+// NAHOR
 // MAIN JAVASCRIPT
 // ========================================
 
@@ -37,6 +37,8 @@ let selectedFile = null;
 let currentMode = "chat";
 
 let activeChatId = null;
+
+userInput.value = userInput.value.trim();
 
 
 // ========================================
@@ -424,13 +426,13 @@ async function sendMessage() {
         hideTyping();
 
         console.error(
-            "Jundh AI Error:",
+            "NAHOR Error:",
             error
         );
 
 
         addAIMessage(
-            "⚠️ I couldn't connect to the Jundh AI server. Check whether Flask is running and try again."
+            "⚠️ I couldn't connect to the NAHOR server. Check whether Flask is running and try again."
         );
 
     }
@@ -562,8 +564,8 @@ function addAIMessage(message) {
     avatar.className =
         "message-avatar";
 
-    avatar.textContent =
-        "J";
+    avatar.innerHTML =
+        '<img src="/static/images/nahor-logo.png" alt="" class="message-logo-img">';
 
 
     const bubble =
@@ -843,7 +845,7 @@ themeBtn.addEventListener(
 
 
         localStorage.setItem(
-            "jundh-theme",
+            "nahor-theme",
             isLight
                 ? "light"
                 : "dark"
@@ -857,7 +859,7 @@ themeBtn.addEventListener(
 
 const savedTheme =
     localStorage.getItem(
-        "jundh-theme"
+        "nahor-theme"
     );
 
 
@@ -922,7 +924,7 @@ modeButtons.forEach(
                         "AI chat with image and document understanding";
 
                     userInput.placeholder =
-                        "Message Jundh AI...";
+                        "Message NAHOR...";
 
                 }
 
@@ -1067,7 +1069,7 @@ imageToolBtn.addEventListener("click", function () {
     fileInput.click();
 
     userInput.placeholder =
-        "Upload an image and ask Jundh AI about it...";
+        "Upload an image and ask NAHOR about it...";
 
     closeMobileSidebar();
 
@@ -1109,7 +1111,7 @@ webToolBtn.addEventListener("click", function () {
     webSearchToggle.checked = true;
 
     userInput.placeholder =
-        "Search the web with Jundh AI...";
+        "Search the web with NAHOR...";
 
     userInput.focus();
 
@@ -1157,8 +1159,8 @@ function addGeneratedImage(
     avatar.className =
         "message-avatar";
 
-    avatar.textContent =
-        "J";
+    avatar.innerHTML =
+        '<img src="/static/images/nahor-logo.png" alt="" class="message-logo-img">';
 
 
     const bubble =
@@ -1422,7 +1424,7 @@ function renderChatList(chats) {
                         activeChatId = null;
 
                         localStorage.removeItem(
-                            "jundh-active-chat-id"
+                            "nahor-active-chat-id"
                         );
 
                         chatBox.innerHTML = "";
@@ -1546,7 +1548,7 @@ async function openChatById(chatId) {
 
 
         localStorage.setItem(
-            "jundh-active-chat-id",
+            "nahor-active-chat-id",
             activeChatId
         );
 
@@ -1586,7 +1588,7 @@ async function initializeChatHistory() {
 
     const storedChatId =
         localStorage.getItem(
-            "jundh-active-chat-id"
+            "nahor-active-chat-id"
         );
 
 
@@ -1653,3 +1655,35 @@ chatHistoryList.addEventListener(
 // ========================================
 
 initializeChatHistory();
+// EMOJI PICKER
+const emojiBtn = document.getElementById("emoji-btn");
+const emojiPicker = document.getElementById("emoji-picker");
+if (emojiBtn && emojiPicker) {
+    emojiBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        emojiPicker.classList.toggle("hidden");
+    });
+    emojiPicker.querySelectorAll(".emoji-option").forEach((button) => {
+        button.addEventListener("click", () => {
+            const start = userInput.selectionStart ?? userInput.value.length;
+            const end = userInput.selectionEnd ?? userInput.value.length;
+            const emoji = button.textContent;
+            userInput.value = userInput.value.slice(0,start) + emoji + userInput.value.slice(end);
+            const pos = start + emoji.length;
+            userInput.focus();
+            userInput.setSelectionRange(pos,pos);
+            userInput.dispatchEvent(new Event("input"));
+        });
+    });
+    document.addEventListener("click", (event) => {
+        if (!emojiPicker.contains(event.target) && event.target !== emojiBtn) {
+            emojiPicker.classList.add("hidden");
+        }
+    });
+}
+document.addEventListener("click", (event) => {
+    if (window.innerWidth <= 720 && sidebar.classList.contains("open") &&
+        !sidebar.contains(event.target) && event.target !== menuBtn) {
+        sidebar.classList.remove("open");
+    }
+});

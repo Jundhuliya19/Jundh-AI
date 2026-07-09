@@ -7,7 +7,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Jundh AI 3.0</title>
+    <title>NAHOR</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -37,13 +37,13 @@
 
         <div class="brand">
 
-            <div class="brand-logo">
-                J
+            <div class="brand-logo logo-image-wrap">
+                <img src="{{ url_for('static', filename='images/nahor-logo.png') }}" alt="NAHOR logo">
             </div>
 
             <div class="brand-text">
 
-                <h2>Jundh AI</h2>
+                <h2>NAHOR</h2>
 
                 <span>
                     Multimodal Assistant
@@ -149,6 +149,7 @@
     Web Search
 </button>
 
+        </div>
 
         <div class="sidebar-bottom">
             <div class="user-profile">
@@ -222,7 +223,7 @@
             <div class="topbar-title">
 
                 <h2>
-                    Jundh AI
+                    NAHOR
                 </h2>
 
                 <p id="mode-description">
@@ -238,7 +239,7 @@
 
                 <span class="online-dot"></span>
 
-                AI Online
+                NAHOR Online
 
             </div>
 
@@ -259,10 +260,8 @@
                  id="welcome-screen">
 
 
-                <div class="hero-logo">
-
-                    J
-
+                <div class="hero-logo logo-image-wrap">
+                    <img src="{{ url_for('static', filename='images/nahor-logo.png') }}" alt="NAHOR logo">
                 </div>
 
 
@@ -275,7 +274,7 @@
 
                 <p>
 
-                    Chat with Jundh AI, upload an image,
+                    Chat with NAHOR, upload an image,
                     ask questions about a PDF, or use your voice.
 
                 </p>
@@ -329,10 +328,8 @@
              class="typing-container hidden">
 
 
-            <div class="typing-avatar">
-
-                J
-
+            <div class="typing-avatar logo-avatar">
+                <img src="{{ url_for('static', filename='images/nahor-logo.png') }}" alt="">
             </div>
 
 
@@ -417,11 +414,26 @@
 
                           rows="1"
 
-                          placeholder="Message Jundh AI...">
+                          placeholder="Message NAHOR...">
 
                 </textarea>
 
 
+
+                <!-- EMOJI -->
+                <div class="emoji-wrapper">
+                    <button id="emoji-btn" class="composer-tool" type="button" title="Emoji">☺</button>
+                    <div id="emoji-picker" class="emoji-picker hidden" aria-label="Emoji picker">
+                        <button class="emoji-option" type="button">😀</button><button class="emoji-option" type="button">😂</button>
+                        <button class="emoji-option" type="button">😭</button><button class="emoji-option" type="button">🥹</button>
+                        <button class="emoji-option" type="button">😍</button><button class="emoji-option" type="button">❤️</button>
+                        <button class="emoji-option" type="button">🔥</button><button class="emoji-option" type="button">✨</button>
+                        <button class="emoji-option" type="button">👍</button><button class="emoji-option" type="button">🙏</button>
+                        <button class="emoji-option" type="button">😌</button><button class="emoji-option" type="button">🤔</button>
+                        <button class="emoji-option" type="button">😎</button><button class="emoji-option" type="button">💀</button>
+                        <button class="emoji-option" type="button">🤣</button><button class="emoji-option" type="button">💚</button>
+                    </div>
+                </div>
 
                 <!-- VOICE -->
 
@@ -471,7 +483,7 @@
 
             <p class="ai-warning">
 
-                Jundh AI can make mistakes.
+                NAHOR can make mistakes.
                 Verify important information.
 
             </p>

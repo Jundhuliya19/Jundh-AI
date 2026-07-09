@@ -33,7 +33,9 @@ from werkzeug.security import (
 
 from database import (
     get_db_connection,
-    create_database
+    create_database,
+    save_document_context,
+    get_document_context
 )
 
 # ==========================================
@@ -46,7 +48,7 @@ app = Flask(__name__)
 
 app.secret_key = os.getenv(
     "FLASK_SECRET_KEY",
-    "jundh-ai-development-secret"
+    "nahor-development-secret"
 )
 # ==========================================
 # LOGIN MANAGER
@@ -80,11 +82,11 @@ CHAT_MODEL = "gemini-2.5-flash"
 
 
 # ==========================================
-# JUNDH AI INSTRUCTIONS
+# NAHOR INSTRUCTIONS
 # ==========================================
 
 SYSTEM_INSTRUCTION = """
-You are Jundh AI, a careful, helpful and transparent AI assistant.
+You are NAHOR, a careful, helpful and transparent AI assistant.
 
 IMPORTANT RULES:
 
@@ -122,7 +124,7 @@ unverified claims or similarly named accounts.
 
 13. Give clear and useful answers.
 
-Your name is Jundh AI.
+Your name is NAHOR.
 """
 
 
@@ -173,7 +175,7 @@ CURRENT USER MESSAGE:
 
 {user_message}
 
-JUNDH AI RESPONSE:
+NAHOR RESPONSE:
 """
 
 
@@ -193,7 +195,7 @@ def save_to_history(user_message, ai_response, chat_id):
         INSERT INTO messages (user_id, chat_id, role, message)
         VALUES (%s, %s, %s, %s)
         """,
-        (current_user.id, chat_id, "Jundh AI", ai_response[:8000])
+        (current_user.id, chat_id, "NAHOR", ai_response[:8000])
     )
 
     chat = connection.execute(
@@ -504,6 +506,13 @@ def chat():
 
             question = user_message or "Summarize this document clearly."
 
+            save_document_context(
+                current_user.id,
+                chat_id,
+                pdf_file.filename or "Uploaded PDF",
+                pdf_text
+            )
+
             pdf_prompt = f"""
 {build_prompt(question, chat_id)}
 
@@ -547,6 +556,53 @@ If the answer is not contained in the document, say that clearly.
 
         prompt = build_prompt(user_message, chat_id)
 
+        document_context = get_document_context(
+            current_user.id,
+            chat_id
+        )
+
+        if document_context:
+            document_followup_terms = (
+                "pdf", "document", "point", "section", "chapter", "page",
+                "clause", "paragraph", "above", "earlier", "previous",
+                "explain", "simpler", "shorter", "summarize", "summary",
+                "this", "that", "it", "consent"
+            )
+
+            normalized_message = user_message.lower().strip()
+
+            is_document_followup = any(
+                term in normalized_message
+                for term in document_followup_terms
+            )
+
+            if is_document_followup:
+                prompt = f"""
+You are NAHOR. The user is continuing a conversation about an uploaded PDF.
+
+IMPORTANT INSTRUCTIONS:
+- Treat the user's current message as a follow-up about the active PDF.
+- Resolve references such as "point 3", "this", "that", "it", "the document",
+  "make it shorter", and "explain it" from the PDF and recent conversation.
+- Answer the question directly.
+- Do not ask the user to choose an example if the reference can be resolved
+  from the PDF or recent chat history.
+- If a numbered point is requested, identify the relevant numbered point from
+  the document or the immediately preceding assistant summary.
+- If the requested information truly does not exist in the PDF or recent
+  conversation, say so clearly.
+
+ACTIVE PDF:
+Document name: {document_context["document_name"]}
+
+PDF CONTENT:
+{document_context["document_text"]}
+
+RECENT CONVERSATION AND CURRENT USER MESSAGE:
+{prompt}
+"""
+
+
         if web_search:
             grounding_tool = types.Tool(
                 google_search=types.GoogleSearch()
@@ -572,7 +628,7 @@ If the answer is not contained in the document, say that clearly.
         return jsonify({"response": answer, "type": "text"})
 
     except Exception as error:
-        print("JUNDH AI ERROR:", error)
+        print("NAHOR ERROR:", error)
         return jsonify({
             "response": f"Something went wrong: {str(error)}"
         }), 500

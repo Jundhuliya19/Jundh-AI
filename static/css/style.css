@@ -1,5 +1,5 @@
 /* ========================================
-   JUNDH AI 3.0
+   NAHOR
    PREMIUM INTERFACE
 ======================================== */
 
@@ -22,14 +22,14 @@
 
     --border: rgba(255, 255, 255, 0.08);
 
-    --purple: #8b5cf6;
-    --blue: #4f7cff;
+    --purple: #18a875;
+    --blue: #4fd1a1;
 
     --gradient:
         linear-gradient(
             135deg,
-            #8b5cf6,
-            #4f7cff
+            #18a875,
+            #4fd1a1
         );
 }
 
@@ -204,7 +204,7 @@ body {
 
     box-shadow:
         0 0 30px
-        rgba(139, 92, 246, 0.3);
+        rgba(24, 168, 117, 0.3);
 }
 
 
@@ -261,7 +261,7 @@ body {
 
     box-shadow:
         0 10px 30px
-        rgba(139, 92, 246, 0.25);
+        rgba(24, 168, 117, 0.25);
 }
 
 
@@ -315,7 +315,7 @@ body {
 .sidebar-action:hover {
 
     background:
-        rgba(139, 92, 246, 0.11);
+        rgba(24, 168, 117, 0.11);
 
     color: var(--text);
 }
@@ -324,7 +324,7 @@ body {
 .mode-btn.active {
 
     background:
-        rgba(139, 92, 246, 0.15);
+        rgba(24, 168, 117, 0.15);
 
     color: var(--text);
 }
@@ -531,7 +531,7 @@ body {
 
     box-shadow:
         0 0 45px
-        rgba(139, 92, 246, 0.32);
+        rgba(24, 168, 117, 0.32);
 }
 
 
@@ -603,10 +603,10 @@ body {
         translateY(-2px);
 
     border-color:
-        rgba(139, 92, 246, 0.5);
+        rgba(24, 168, 117, 0.5);
 
     background:
-        rgba(139, 92, 246, 0.08);
+        rgba(24, 168, 117, 0.08);
 }
 
 
@@ -693,7 +693,7 @@ body {
     background:
         linear-gradient(
             135deg,
-            rgba(139, 92, 246, 0.22),
+            rgba(24, 168, 117, 0.22),
             rgba(79, 124, 255, 0.16)
         );
 }
@@ -1087,7 +1087,7 @@ body {
 input:checked + span {
 
     background:
-        rgba(139, 92, 246, 0.18);
+        rgba(24, 168, 117, 0.18);
 
     color: #b8a3ff;
 }
@@ -1136,7 +1136,7 @@ input:checked + span {
     border-radius: 20px;
 
     background:
-        rgba(139, 92, 246, 0.45);
+        rgba(24, 168, 117, 0.45);
 }
 
 
@@ -1359,7 +1359,7 @@ input:checked + span {
 }
 
 .tool-button:hover {
-    background: rgba(139, 92, 246, 0.11);
+    background: rgba(24, 168, 117, 0.11);
     color: var(--text);
     border-radius: 11px;
 }
@@ -1537,12 +1537,12 @@ input:checked + span {
 }
 
 .chat-history-item:hover {
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(24, 168, 117, 0.1);
     color: var(--text);
 }
 
 .chat-history-item.active {
-    background: rgba(139, 92, 246, 0.16);
+    background: rgba(24, 168, 117, 0.16);
     color: var(--text);
 }
 
@@ -1563,4 +1563,126 @@ input:checked + span {
     font-size: 11px;
 
     line-height: 1.5;
+}
+.emoji-wrapper{position:relative;flex-shrink:0}
+.emoji-picker{position:absolute;right:0;bottom:52px;width:244px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:10px;border:1px solid var(--border);border-radius:16px;background:var(--panel-solid);box-shadow:0 20px 60px rgba(0,0,0,.35);z-index:60}
+.emoji-option{width:48px;height:42px;border:0;border-radius:10px;background:transparent;font-size:22px;cursor:pointer}
+.emoji-option:hover{background:var(--panel-hover)}
+@media(max-width:720px){
+.topbar{height:64px}.online-status{font-size:10px}.composer{gap:3px;padding:7px;border-radius:17px}
+.composer-tool,.send-btn{width:38px;height:38px}#user-input{min-height:38px;padding:9px 5px;font-size:16px}
+.emoji-picker{position:fixed;left:10px;right:10px;bottom:88px;width:auto;grid-template-columns:repeat(8,1fr)}
+.emoji-option{width:100%;height:38px;font-size:20px}.message-row{gap:8px;margin:16px 0}
+.message-avatar{width:32px;height:32px;border-radius:10px;font-size:12px}
+.message-bubble{max-width:calc(100% - 40px);padding:13px 14px;border-radius:15px}}
+@media(max-width:420px){.emoji-picker{grid-template-columns:repeat(4,1fr);bottom:92px}}
+
+
+/* ========================================
+   NAHOR PHASE 1.1 — LAYOUT CLEANUP
+======================================== */
+
+.sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.chat-history-list {
+    max-height: 150px;
+}
+
+.main-content {
+    min-height: 0;
+}
+
+.chat-box {
+    min-height: 0;
+    padding-bottom: 110px;
+}
+
+.message-row.ai .message-bubble {
+    max-width: min(78%, 760px);
+}
+
+.message-row.user .message-bubble {
+    max-width: min(68%, 620px);
+}
+
+.message-row.user .message-avatar {
+    font-size: 11px;
+    padding: 0 5px;
+}
+
+.composer-area {
+    position: relative;
+    flex-shrink: 0;
+    background: linear-gradient(to top, var(--background) 65%, transparent);
+}
+
+.composer {
+    width: 100%;
+}
+
+#user-input {
+    min-width: 80px;
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        height: 100dvh;
+        padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    }
+
+    .chat-history-list {
+        max-height: 135px;
+    }
+
+    .chat-box {
+        padding-bottom: 95px;
+    }
+
+    .message-row.ai .message-bubble,
+    .message-row.user .message-bubble {
+        max-width: calc(100% - 42px);
+    }
+
+    .message-row.user .message-avatar {
+        width: 32px;
+        min-width: 32px;
+    }
+
+    .composer-area {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+}
+
+/* NAHOR LOGO INTEGRATION */
+.logo-image-wrap {
+    padding: 0;
+    overflow: hidden;
+    background: #080a10;
+}
+.logo-image-wrap img,
+.logo-avatar img,
+.message-logo-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.brand-logo.logo-image-wrap {
+    border-radius: 15px;
+}
+.hero-logo.logo-image-wrap {
+    border-radius: 24px;
+}
+.typing-avatar.logo-avatar,
+.message-row.ai .message-avatar {
+    padding: 0;
+    overflow: hidden;
+    background: #080a10;
+}
+.message-logo-img {
+    border-radius: inherit;
 }

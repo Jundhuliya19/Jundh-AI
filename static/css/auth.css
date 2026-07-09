@@ -10,8 +10,8 @@
     --text: #f5f7ff;
     --muted: #8f97aa;
     --border: rgba(255, 255, 255, 0.09);
-    --purple: #8b5cf6;
-    --blue: #4f7cff;
+    --purple: #18a875;
+    --blue: #4fd1a1;
 }
 
 html,
@@ -28,7 +28,7 @@ body {
     background:
         radial-gradient(
             circle at 20% 10%,
-            rgba(139, 92, 246, 0.15),
+            rgba(24, 168, 117, 0.15),
             transparent 32%
         ),
         radial-gradient(
@@ -127,7 +127,7 @@ body {
     font-weight: 800;
 
     box-shadow:
-        0 0 35px rgba(139, 92, 246, 0.32);
+        0 0 35px rgba(24, 168, 117, 0.32);
 }
 
 .auth-card h1 {
@@ -198,14 +198,14 @@ body {
 
 .input-group input:focus {
     border-color:
-        rgba(139, 92, 246, 0.75);
+        rgba(24, 168, 117, 0.75);
 
     background:
-        rgba(139, 92, 246, 0.05);
+        rgba(24, 168, 117, 0.05);
 
     box-shadow:
         0 0 0 4px
-        rgba(139, 92, 246, 0.09);
+        rgba(24, 168, 117, 0.09);
 }
 
 .auth-button {
@@ -244,7 +244,7 @@ body {
 
     box-shadow:
         0 12px 30px
-        rgba(139, 92, 246, 0.25);
+        rgba(24, 168, 117, 0.25);
 }
 
 .error-message {
